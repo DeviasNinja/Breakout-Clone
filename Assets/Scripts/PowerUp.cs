@@ -21,6 +21,7 @@ public class PowerUp : MonoBehaviour {
         rb.velocity = Vector3.zero;
     }
 
+    //Spawns the powerup at given location
     public void Spawn(Transform position) {
         transform.position = position.position;
         inUse = true;
@@ -28,12 +29,14 @@ public class PowerUp : MonoBehaviour {
         rb.AddForce(Vector3.down * 150);
     }
 
+    //Despawns the powerup by moving it off screen
     public void DeSpawn() {
         inUse = false;
         rb.isKinematic = true;
         transform.position = new Vector3(20, 20, 20);
     }
 
+    //Plays sound and determines what the power up does when interacted with
     void OnTriggerEnter(Collider other) {
         if (other.name.Contains("Paddle") ) {
             switch (type) {

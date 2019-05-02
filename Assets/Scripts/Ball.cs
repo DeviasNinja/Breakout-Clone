@@ -1,12 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿//Removed Unused Namespaces
 using UnityEngine;
 
+//The class for the player balls sound effects
 public class Ball : MonoBehaviour {
 
     public AudioSource effectPlayer;
     public AudioClip[] sounds; //0 = Hit wall, 1 = Hit Paddle, 2 = Killed a Brick
 
+    //Whenever the ball hits something, it determines what it hit 
+    //then plays the appropriate sound
     void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.name.Contains("Bounds")) {
             effectPlayer.PlayOneShot(sounds[0], 0.5f);

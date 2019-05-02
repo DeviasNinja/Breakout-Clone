@@ -11,8 +11,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections.Generic;
 
+//Main game logic for the entire game
 public class GameLogic : MonoBehaviour {
-    public static GameLogic logic;
+    public static GameLogic logic; //Singleton design pattern
 
     //Player Logic
     [SerializeField] protected int score;
@@ -49,6 +50,7 @@ public class GameLogic : MonoBehaviour {
 
     public Level[] levels;//NFS
 
+    //Singleton awake function
     void Awake() {
         if (logic == null) {
             DontDestroyOnLoad(gameObject);
@@ -58,15 +60,15 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
     void Start () {
         paddleTrans = paddle.GetComponent<Transform>(); //Link
     }
 	
-	// Update is called once per frame
 	void Update () {
+        //Start timer reference and starts the game when 0
         if (startTimer > 0) {
             startTimer -= Time.deltaTime;
+            //Updates the ui screen timer
             if (!ui[4].gameObject.activeSelf)
                 ui[4].gameObject.SetActive(true);
             else
@@ -77,11 +79,14 @@ public class GameLogic : MonoBehaviour {
             ui[4].gameObject.SetActive(false);
         }
 
+        //Updates things on the screen, This could be better optimized to only change
+        //when the value is actually changed.
         ui[0].text = "TIME: " + time.ToString("F0") + "s";
         ui[1].text = score.ToString() + " :SCORE";
         ui[2].text = "LIVES: " + lives.ToString();
         ui[3].text = "x" + multiplier.ToString() + " :MULTIPLIER";
 
+        //In-game logic
         if (playing && startTimer <= 0) {
             time += Time.deltaTime;
             ball.velocity *= 1.0001f;
@@ -109,6 +114,7 @@ public class GameLogic : MonoBehaviour {
         if (bricksCount <= 0) {
             GameOver();
         } else {
+            //Power up spawner logic using object pooling
             random = Random.Range(0, 100);
             if (random > 0 && random < 70) {
                 //Nothing
@@ -153,7 +159,7 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
-    //Restets the bricks
+    //Resets the bricks
     public void RestartGame() {
         bricksCount = 0;
         lives = 3;
@@ -172,15 +178,15 @@ public class GameLogic : MonoBehaviour {
         else
             pName = input.text;
 
-        string url = "http://apps.iversoft.ca/internal-leaderboard/api.php";
+        //string url = "http://apps.iversoft.ca/internal-leaderboard/api.php";
 
-        WWWForm form = new WWWForm();
-        form.AddField("name", pName);
-        form.AddField("score", score.ToString());
-        form.AddField("time", time.ToString());
-        WWW www = new WWW(url, form);
+        //WWWForm form = new WWWForm();
+        //form.AddField("name", pName);
+        //form.AddField("score", score.ToString());
+        //form.AddField("time", time.ToString());
+        //WWW www = new WWW(url, form);
 
-        StartCoroutine(Upload(www));
+        //StartCoroutine(Upload(www));
 
         submit.SetActive(false);
         start.SetActive(true);
